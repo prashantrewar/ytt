@@ -34,12 +34,23 @@ checksum:
   name_template: 'checksums.txt'
   algorithm: sha256
   disable: false
+signs:
+  - artifacts: checksum
+    certificate: '${artifact}.pem'
+    cmd: cosign
+    args:
+      - sign-blob
+      - "--yes"
+      - '--output-certificate=${certificate}'
+      - '--output-signature=${signature}'
+      - '${artifact}'
+    output: true
 snapshot:
   name_template: "{{ .Tag }}-next"
 release:
   # Repo in which the release will be created.
   github:
-    owner: carvel-dev
+    owner: prashantrewar
     name: ytt
 
   # If set to true, will not auto-publish the release.
